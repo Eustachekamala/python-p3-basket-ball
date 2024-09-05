@@ -1,3 +1,5 @@
+from lib.basket_ball import *
+
 def game_dict():
     return {
         "home": {
@@ -182,3 +184,128 @@ def game_dict():
             ]
         }
     }
+    
+def num_points_per_game(game_dict):
+    # Extract the "home" and "away" team data
+    teams = ["home", "away"]
+    points_per_game = {}
+
+    # The loop below will extract the points_per_game for each player in each team
+    for team in teams:
+        for player in game_dict[team]["players"]:
+            points_per_game[player["name"]] = player["points_per_game"]
+    
+    return points_per_game
+# This function will return the age of a player
+def player_age(player):
+    return player["age"]
+# This function will return the height of a player
+def team_colors(team):
+    return team["colors"]
+# This function will return the name of a team
+def team_name(team):
+    return team["team_name"]
+# This function will return the stats of a player
+def player_stats(player_name):
+    data = game_dict()
+    # Search for the player in both teams
+    for team in data.values():
+        for player in team["players"]:
+            if player["name"] == player_name:
+                return player
+                
+    # If player is not found, return None
+    return None
+
+# This function will return the number of a player
+def player_number(player):
+    return player["number"]
+
+def average_rebounds_by_shoe_brand():
+    # This dictionary will store the average rebounds per shoe brand
+    shoe_brands_rebounds = {}
+    
+    # Get the game data
+    data = game_dict()
+    
+    # Iterate through both home and away teams
+    for team in data.values():
+        for player in team["players"]:
+            brand = player["shoe_brand"]
+            rebounds = player["rebounds_per_game"]
+            
+            # He we haven't seen this brand before, create an empty list
+            if brand not in shoe_brands_rebounds:
+                shoe_brands_rebounds[brand] = []
+            
+            # Append the player's rebounds to the appropriate brand list
+            shoe_brands_rebounds[brand].append(rebounds)
+    
+    # Here we calculate the average rebounds per shoe brand
+    for brand, rebounds_list in shoe_brands_rebounds.items():
+        average_rebounds = sum(rebounds_list) / len(rebounds_list)
+        print(f"{brand}: {average_rebounds:.2f}")
+        
+def player_with_most_career_points():
+    data = game_dict()
+    max_points = 0
+    player_with_max_points = None
+    
+    for team in data.values():
+        for player in team["players"]:
+            if player["career_points"] > max_points:
+                max_points = player["career_points"]
+                player_with_max_points = player["name"]
+                
+    return player_with_max_points, max_points
+
+# Example usage
+print(player_with_most_career_points())
+
+def jersey_numbers_worn_by_both_teams():
+    data = game_dict()
+    home_team_numbers = set()
+    away_team_numbers = set()
+    
+    for player in data["home"]["players"]:
+        home_team_numbers.add(player["number"])
+    
+    for player in data["away"]["players"]:
+        away_team_numbers.add(player["number"])
+    
+    common_numbers = home_team_numbers.intersection(away_team_numbers)
+    
+    return common_numbers
+
+# Example usage
+print(jersey_numbers_worn_by_both_teams())
+
+def player_with_longest_name():
+    data = game_dict()
+    longest_name_length = 0
+    player_with_longest_name = None
+    
+    for team in data.values():
+        for player in team["players"]:
+            if len(player["name"]) > longest_name_length:
+                longest_name_length = len(player["name"])
+                player_with_longest_name = player["name"]
+                
+    return player_with_longest_name, longest_name_length
+
+# Example usage
+print(player_with_longest_name())
+
+
+print("***************************")
+print(num_points_per_game(game_dict()))
+print(team_colors(game_dict()["home"]))
+print(team_name(game_dict()["home"]))
+print(player_number(player_stats("Darius Garland")))
+print(player_stats("Darius Garland"))
+print(average_rebounds_by_shoe_brand())
+print(player_with_most_career_points())
+print(jersey_numbers_worn_by_both_teams())
+print(player_with_longest_name())
+print("***************************")
+
